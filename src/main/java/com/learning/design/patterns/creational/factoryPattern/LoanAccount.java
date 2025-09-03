@@ -1,4 +1,4 @@
-package com.learning.design.patterns.factoryPattern;
+package com.learning.design.patterns.creational.factoryPattern;
 
 public class LoanAccount implements BankAccount {
     @Override

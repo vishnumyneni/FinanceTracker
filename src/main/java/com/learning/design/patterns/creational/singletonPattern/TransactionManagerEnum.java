@@ -1,4 +1,4 @@
-package com.learning.design.patterns.singletonPattern;
+package com.learning.design.patterns.creational.singletonPattern;
 
 public enum TransactionManagerEnum {
     INSTANCE;
