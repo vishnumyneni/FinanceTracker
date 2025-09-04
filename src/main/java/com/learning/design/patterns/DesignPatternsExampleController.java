@@ -1,8 +1,14 @@
 package com.learning.design.patterns;
 
+import com.learning.design.patterns.creational.abstractFactoryPattern.AbstractFactoryProducer;
+import com.learning.design.patterns.creational.abstractFactoryPattern.Account;
+import com.learning.design.patterns.creational.abstractFactoryPattern.BankingFactory;
+import com.learning.design.patterns.creational.abstractFactoryPattern.Loan;
 import com.learning.design.patterns.creational.factoryPattern.AccountFactory;
+import com.learning.design.patterns.creational.factoryPattern.BankAccount;
 import com.learning.design.patterns.creational.singletonPattern.TransactionManager;
 import com.learning.design.patterns.creational.singletonPattern.TransactionManagerEnum;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,8 +47,26 @@ public class DesignPatternsExampleController {
     }
 
     @GetMapping("/creational/factory-pattern")
+    @Operation(summary = "Factory Pattern Example", description = "Inputs - loan/savings")
     public String factoryPatternExample(@RequestParam String type) {
         // Factory Pattern Example
         return AccountFactory.createAccount(type).accountType();
+    }
+
+    @GetMapping("/creational/abstract-factory-pattern")
+    @Operation(summary = "Factory Pattern Example", description = "Inputs - 1. account/loan, 2. savings/checking")
+    public String abstractFactoryPatternExample(@RequestParam String type, @RequestParam String accountType) {
+        // Abstract Factory Pattern Example
+        if ("account".equalsIgnoreCase(type)) {
+            BankingFactory bankAccountsFactory = AbstractFactoryProducer.getFactory(type);
+            Account bankAccount = bankAccountsFactory.createBankAccount(accountType);
+            return bankAccount != null ? bankAccount.accountType() : "Invalid account type. Please use 'savings' or 'checking'.";
+        } else if ("loan".equalsIgnoreCase(type)) {
+            BankingFactory loanAccountsFactory = AbstractFactoryProducer.getFactory(type);
+            Loan loanAccount = loanAccountsFactory.createLoanAccount(accountType);
+            return loanAccount != null ? loanAccount.loanType() : "Invalid loan type. Please use 'home' or 'personal'.";
+        } else {
+            return "Invalid type. Please use 'account' or 'loan'.";
+        }
     }
 }
