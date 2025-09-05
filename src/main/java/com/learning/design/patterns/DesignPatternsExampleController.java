@@ -4,15 +4,14 @@ import com.learning.design.patterns.creational.abstractFactoryPattern.AbstractFa
 import com.learning.design.patterns.creational.abstractFactoryPattern.Account;
 import com.learning.design.patterns.creational.abstractFactoryPattern.BankingFactory;
 import com.learning.design.patterns.creational.abstractFactoryPattern.Loan;
+import com.learning.design.patterns.creational.builderPattern.Transaction;
+import com.learning.design.patterns.creational.builderPattern.TransactionUsingAnnotations;
 import com.learning.design.patterns.creational.factoryPattern.AccountFactory;
 import com.learning.design.patterns.creational.factoryPattern.BankAccount;
 import com.learning.design.patterns.creational.singletonPattern.TransactionManager;
 import com.learning.design.patterns.creational.singletonPattern.TransactionManagerEnum;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/design-patterns")
@@ -68,5 +67,22 @@ public class DesignPatternsExampleController {
         } else {
             return "Invalid type. Please use 'account' or 'loan'.";
         }
+    }
+
+    @GetMapping("/creational/builder-pattern/{fromAccount}/{toAccount}/{amount}")
+    public String builderPatternExample(@PathVariable String fromAccount, @PathVariable String toAccount, @PathVariable double amount) {
+        Transaction transaction = new Transaction.Builder(fromAccount, toAccount, amount)
+                .remarks("Txn created using manually written builder class")
+                .build();
+
+        TransactionUsingAnnotations transaction1 = TransactionUsingAnnotations.builder()
+                .fromAccount(fromAccount)
+                .toAccount(toAccount)
+                .amount(amount)
+                .remarks("Txn created using Lombok builder annotations")
+                .build();
+
+        return "Transaction details: " + transaction.toString() + "\n" +
+                "TransactionUsingAnnotations details: " + transaction1.toString();
     }
 }
