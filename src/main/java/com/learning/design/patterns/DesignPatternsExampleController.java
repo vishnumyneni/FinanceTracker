@@ -7,7 +7,7 @@ import com.learning.design.patterns.creational.abstractFactoryPattern.Loan;
 import com.learning.design.patterns.creational.builderPattern.Transaction;
 import com.learning.design.patterns.creational.builderPattern.TransactionUsingAnnotations;
 import com.learning.design.patterns.creational.factoryPattern.AccountFactory;
-import com.learning.design.patterns.creational.factoryPattern.BankAccount;
+import com.learning.design.patterns.creational.prototypePattern.PTransaction;
 import com.learning.design.patterns.creational.singletonPattern.TransactionManager;
 import com.learning.design.patterns.creational.singletonPattern.TransactionManagerEnum;
 import io.swagger.v3.oas.annotations.Operation;
@@ -84,5 +84,18 @@ public class DesignPatternsExampleController {
 
         return "Transaction details: " + transaction.toString() + "\n" +
                 "TransactionUsingAnnotations details: " + transaction1.toString();
+    }
+
+    @GetMapping("/creational/prototype-pattern")
+    public String prototypePatternExample(@RequestParam String fromAccount, @RequestParam String toAccount, @RequestParam double amount1, @RequestParam double amount2) {
+        PTransaction pTransactionPrototype = new PTransaction(fromAccount, toAccount, amount1);
+
+        PTransaction transaction1 = pTransactionPrototype.getClone();
+
+        PTransaction transaction2 = pTransactionPrototype.getClone();
+        transaction2.setAmount(amount2);
+
+        return "Transaction1 details: " + transaction1.toString() + "\n" +
+               "Transaction2 details: " + transaction2.toString();
     }
 }
